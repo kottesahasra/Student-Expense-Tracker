@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account | Student Expense Tracker</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--bg-app);
+      padding: var(--space-4);
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 480px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      box-shadow: var(--shadow-lg);
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: var(--space-6);
+    }
+    .auth-header .logo-badge {
+      width: 50px;
+      height: 50px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: var(--space-3);
+    }
+  </style>
+</head>
+<body class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="logo-badge">🎓</div>
+      <h2>Student Registration</h2>
+      <p class="text-muted mt-2">Start managing your college budget today</p>
+    </div>
+
+    <form id="register-form">
+      <div class="form-group">
+        <label class="form-label" for="full-name">Full Name</label>
+        <input type="text" id="full-name" class="form-control" placeholder="Alex Morgan" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Campus or Personal Email</label>
+        <input type="email" id="email" class="form-control" placeholder="alex@university.edu" required autocomplete="email">
+        <div id="email-error" class="form-error hidden"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Create Password (min. 6 characters)</label>
+        <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="new-password">
+        <div id="password-error" class="form-error hidden"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="currency">Preferred Currency</label>
+        <select id="currency" class="form-control">
+          <option value="USD">USD ($)</option>
+          <option value="EUR">EUR (€)</option>
+          <option value="GBP">GBP (£)</option>
+          <option value="CAD">CAD ($)</option>
+          <option value="AUD">AUD ($)</option>
+          <option value="INR">INR (₹)</option>
+        </select>
+      </div>
+
+      <button type="submit" id="register-submit-btn" class="btn btn-primary" style="width: 100%; padding: 0.75rem; margin-top: 1rem;">
+        Create Student Account
+      </button>
+    </form>
+
+    <div class="text-center mt-4" style="font-size: var(--font-size-sm)">
+      <p>Already have an account? <a href="login.html" class="font-semibold">Log In</a></p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/guards.js"></script>
+  <script>
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fullName = document.getElementById('full-name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const currency = document.getElementById('currency').value;
+      const btn = document.getElementById('register-submit-btn');
+
+      if (!Validation.isValidEmail(email)) {
+        Validation.showFieldError('email', 'Please provide a valid email address');
+        return;
+      } else {
+        Validation.clearFieldError('email');
+      }
+
+      if (!Validation.isValidPassword(password)) {
+        Validation.showFieldError('password', 'Password must be at least 6 characters');
+        return;
+      } else {
+        Validation.clearFieldError('password');
+      }
+
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Creating account...';
+        await Auth.register(email, password, fullName, currency);
+        const token = Auth.getToken();
+        if (token) {
+          Utils.showToast('Registration successful! Redirecting to dashboard...', 'success');
+          setTimeout(() => {
+            window.location.href = 'dashboard.html';
+          }, 800);
+        } else {
+          btn.disabled = false;
+          btn.textContent = 'Create Student Account';
+          Utils.showToast('Account created! If email confirmation is required, please verify your email before logging in.', 'info');
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 2500);
+        }
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Create Student Account';
+        Utils.showToast(err.message || 'Registration failed', 'error');
+      }
+    });
+  </script>
+</body>
+</html>
+

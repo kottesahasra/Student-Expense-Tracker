@@ -1,0 +1,27 @@
+{
+  "name": "student-expense-tracker",
+  "version": "1.0.0",
+  "description": "Student Expense Tracker - Full stack budgeting and expense management application",
+  "scripts": {
+    "start": "npm --prefix server start",
+    "server": "npm --prefix server start",
+    "server:dev": "npm --prefix server run dev",
+    "client": "npx serve client -l 3000",
+    "dev": "concurrently \"npm run server:dev\" \"npm run client\"",
+    "test": "npm --prefix server test"
+  },
+  "keywords": [
+    "expense-tracker",
+    "budget",
+    "finance",
+    "students",
+    "supabase",
+    "express"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
+

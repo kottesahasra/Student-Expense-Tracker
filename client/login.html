@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | Student Expense Tracker</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <style>
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: var(--bg-app);
+      padding: var(--space-4);
+    }
+    .auth-card {
+      width: 100%;
+      max-width: 440px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      box-shadow: var(--shadow-lg);
+    }
+    .auth-header {
+      text-align: center;
+      margin-bottom: var(--space-6);
+    }
+    .auth-header .logo-badge {
+      width: 50px;
+      height: 50px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+      color: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: var(--space-3);
+    }
+  </style>
+</head>
+<body class="auth-page">
+  <div class="auth-card">
+    <div class="auth-header">
+      <div class="logo-badge">🎓</div>
+      <h2>Welcome Back</h2>
+      <p class="text-muted mt-2">Log in to manage your student finances</p>
+    </div>
+
+    <form id="login-form">
+      <div class="form-group">
+        <label class="form-label" for="email">Campus or Personal Email</label>
+        <input type="email" id="email" class="form-control" placeholder="student@university.edu" required autocomplete="email">
+        <div id="email-error" class="form-error hidden"></div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input type="password" id="password" class="form-control" placeholder="••••••••" required autocomplete="current-password">
+        <div id="password-error" class="form-error hidden"></div>
+      </div>
+
+      <button type="submit" id="login-submit-btn" class="btn btn-primary" style="width: 100%; padding: 0.75rem; margin-top: 1rem;">
+        Sign In
+      </button>
+    </form>
+
+    <div class="text-center mt-4" style="font-size: var(--font-size-sm)">
+      <p>Don't have an account yet? <a href="register.html" class="font-semibold">Sign Up</a></p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/validation.js"></script>
+  <script src="js/guards.js"></script>
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const btn = document.getElementById('login-submit-btn');
+
+      if (!Validation.isValidEmail(email)) {
+        Validation.showFieldError('email', 'Please provide a valid email address');
+        return;
+      } else {
+        Validation.clearFieldError('email');
+      }
+
+      try {
+        btn.disabled = true;
+        btn.textContent = 'Signing in...';
+        await Auth.login(email, password);
+        Utils.showToast('Login successful! Redirecting...', 'success');
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 600);
+      } catch (err) {
+        btn.disabled = false;
+        btn.textContent = 'Sign In';
+        Utils.showToast(err.message || 'Login failed. Please check your credentials.', 'error');
+      }
+    });
+  </script>
+</body>
+</html>
+

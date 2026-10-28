@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Transactions | Student Expense Tracker</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="app-sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo-icon">🎓</div>
+        <div class="sidebar-brand-title">Student Expense</div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Overview</div>
+        <a href="dashboard.html" class="nav-item"><span>📊 Dashboard</span></a>
+        <a href="transactions.html" class="nav-item active"><span>💳 Transactions</span></a>
+        <div class="nav-section-label">Planning</div>
+        <a href="budgets.html" class="nav-item"><span>🎯 Monthly Budgets</span></a>
+        <a href="goals.html" class="nav-item"><span>🏆 Savings Goals</span></a>
+        <a href="recurring.html" class="nav-item"><span>🔄 Subscriptions & Bills</span></a>
+        <div class="nav-section-label">Insights</div>
+        <a href="analytics.html" class="nav-item"><span>📈 Analytics & Trends</span></a>
+        <a href="settings.html" class="nav-item"><span>⚙️ Settings</span></a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-snippet">
+          <div class="user-avatar" id="nav-user-avatar">S</div>
+          <div class="user-info">
+            <div class="user-name" id="nav-user-name">Student</div>
+            <div class="user-email" id="nav-user-email">student@campus.edu</div>
+          </div>
+          <button onclick="Auth.logout()" title="Logout" style="background:none; border:none; color:var(--text-sidebar); cursor:pointer;">🚪</button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="app-main">
+      <header class="app-header">
+        <h2 style="font-size: 1.25rem;">Transactions</h2>
+        <div class="d-flex gap-3">
+          <button class="btn btn-secondary" id="export-csv-btn">📥 Export CSV</button>
+          <button class="btn btn-primary" onclick="openNewTransactionModal()">+ New Transaction</button>
+        </div>
+      </header>
+
+      <div class="app-content">
+        <!-- Filter Controls -->
+        <div class="card mb-6" style="padding: var(--space-4);">
+          <div class="d-flex gap-4 flex-wrap align-center">
+            <div style="flex: 2; min-width: 200px;">
+              <input type="text" id="search-input" class="form-control" placeholder="Search by item, payee, notes...">
+            </div>
+            <div style="flex: 1; min-width: 140px;">
+              <select id="type-filter" class="form-control">
+                <option value="">All Types</option>
+                <option value="expense">Expenses Only</option>
+                <option value="income">Income Only</option>
+              </select>
+            </div>
+            <div style="flex: 1; min-width: 160px;">
+              <select id="category-filter" class="form-control">
+                <option value="">All Categories</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transactions Table -->
+        <div class="table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Amount</th>
+                <th class="text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="transactions-tbody">
+              <tr><td colspan="6" class="text-center text-muted py-6">Loading transactions...</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination Bar -->
+        <div class="d-flex justify-between align-center mt-4">
+          <span id="page-indicator" class="text-muted" style="font-size: var(--font-size-sm)">Page 1</span>
+          <div class="d-flex gap-2">
+            <button id="prev-page-btn" class="btn btn-secondary btn-sm" disabled>Previous</button>
+            <button id="next-page-btn" class="btn btn-secondary btn-sm" disabled>Next</button>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Add/Edit Transaction Modal -->
+  <div class="modal-overlay" id="transaction-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Add Transaction</h3>
+        <button class="modal-close" onclick="Utils.closeModal('transaction-modal')">&times;</button>
+      </div>
+      <form id="transaction-form">
+        <input type="hidden" id="tx-id">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label" for="tx-title">Title / Item</label>
+            <input type="text" id="tx-title" class="form-control" placeholder="e.g. Campus Cafeteria, Rent" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="tx-amount">Amount</label>
+            <input type="number" step="0.01" id="tx-amount" class="form-control" placeholder="0.00" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="tx-type">Type</label>
+            <select id="tx-type" class="form-control">
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="tx-category">Category</label>
+            <select id="tx-category" class="form-control">
+              <option value="">Select Category</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="tx-date">Date</label>
+            <input type="date" id="tx-date" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="tx-description">Notes (Optional)</label>
+            <textarea id="tx-description" class="form-control" rows="2" placeholder="e.g. Course syllabus required reading"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="Utils.closeModal('transaction-modal')">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/guards.js"></script>
+  <script src="js/transactions.js"></script>
+</body>
+</html>
+

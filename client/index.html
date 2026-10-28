@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Expense Tracker | Master Your College Finances</title>
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <style>
+    .hero-section {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: var(--space-10) var(--space-6);
+      background: radial-gradient(circle at 50% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 60%);
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      border-radius: var(--radius-full);
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      font-size: var(--font-size-xs);
+      font-weight: 700;
+      margin-bottom: var(--space-4);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .hero-title {
+      font-size: 3rem;
+      max-width: 800px;
+      margin-bottom: var(--space-4);
+      line-height: 1.15;
+    }
+    .hero-title span {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-subtitle {
+      font-size: var(--font-size-lg);
+      max-width: 600px;
+      margin-bottom: var(--space-8);
+      color: var(--text-secondary);
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--space-6);
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: var(--space-8) var(--space-6);
+    }
+    .feature-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-xl);
+      padding: var(--space-8);
+      box-shadow: var(--shadow-sm);
+    }
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-lg);
+      background: var(--color-primary-light);
+      color: var(--color-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: var(--space-4);
+    }
+  </style>
+</head>
+<body>
+  <header style="padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); background: var(--bg-surface);">
+    <div class="d-flex align-center gap-3">
+      <div class="sidebar-logo-icon">🎓</div>
+      <div class="font-bold" style="font-size: 1.15rem;">Student Expense Tracker</div>
+    </div>
+    <div class="d-flex align-center gap-4">
+      <a href="login.html" class="btn btn-secondary">Log In</a>
+      <a href="register.html" class="btn btn-primary">Sign Up Free</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero-section">
+      <span class="hero-badge">Built for College & University Students</span>
+      <h1 class="hero-title">Take control of your student budget <span>without the stress</span></h1>
+      <p class="hero-subtitle">Track textbooks, tuition, campus meals, and rent. Set category spending limits and hit your graduation savings goals.</p>
+      <div class="d-flex gap-4">
+        <a href="register.html" class="btn btn-primary" style="padding: 0.875rem 1.75rem; font-size: 1rem;">Get Started Free</a>
+        <a href="login.html" class="btn btn-secondary" style="padding: 0.875rem 1.75rem; font-size: 1rem;">Access Account</a>
+      </div>
+    </section>
+
+    <section class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <h3 class="card-title">Real-time Analytics</h3>
+        <p>Interactive charts break down spending across food, rent, courses, and leisure to avoid end-of-semester surprises.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🎯</div>
+        <h3 class="card-title">Savings Goals</h3>
+        <p>Set targets for a new laptop, study abroad trips, or emergency funds with automatic progress updates.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔄</div>
+        <h3 class="card-title">Recurring Bills</h3>
+        <p>Never forget student subscriptions, campus rent, tuition installments, or WiFi payments with automated tracking.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer style="text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.875rem; border-top: 1px solid var(--border-color);">
+    &copy; 2026 Student Expense Tracker. Designed for campus life.
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/config.js"></script>
+  <script src="js/guards.js"></script>
+</body>
+</html>
+
